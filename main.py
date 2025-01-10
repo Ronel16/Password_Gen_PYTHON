@@ -1,80 +1,82 @@
-#!/usr/bin/env python
-"""
-Programme principal intégrant toutes les fonctionnalités
-"""
-
+"""Programme principal - Générateur et testeur de mots de passe"""
 from password_checker import PasswordChecker
 from password_generator import PasswordGenerator
 from passphrase_generator import PassphraseGenerator
 
 def main():
-    # Initialisation
+    # Initialisation des classes
     checker = PasswordChecker()
     generator = PasswordGenerator()
     passphrase_gen = PassphraseGenerator()
     
     while True:
-        print("\n🔐 Menu Principal")
+        print("\n🔐 Générateur et Testeur de mot de passe 🔐")
         print("1. 🔍 Tester un mot de passe")
         print("2. 🎲 Générer un mot de passe")
-        print("3. 📝 Générer une passphrase")
-        print("4. 👋 Quitter")
+        print("3. 🎯 Générer une passphrase (méthode des dés)")
+        print("4. 📖 Instructions méthode des dés")
+        print("5. 👋 Quitter")
         
-        choice = input("\nChoix (1-4): ")
+        choix = input("\nChoix (1-5): ")
         
-        if choice == "1":
-            # Test de mot de passe
-            password = input("Mot de passe à tester: ")
-            entropy = checker.calculate_entropy(password)
-            strength = checker.check_password_strength(password)
-            print(f"Entropie: {entropy:.2f} bits")
-            print(f"Force: {strength}")
-            
-        elif choice == "2":
+        if choix == "1":
             try:
-                # Génération de mot de passe
+                password = input("Mot de passe à tester: ")
+                force = checker.evaluer_force(password)
+                print(f"\nForce: {force}")
+                
+                # Détails de la composition
+                min, maj, chif, spe = checker.verifier_caracteres(password)
+                print(f"\nDétails du mot de passe:")
+                print(f"📍 Minuscules: {min}")
+                print(f"📍 Majuscules: {maj}")
+                print(f"📍 Chiffres: {chif}")
+                print(f"📍 Spéciaux: {spe}")
+                
+            except Exception as e:
+                print(f"❌ Erreur: {str(e)}")
+                
+        elif choix == "2":
+            try:
                 print("\nComposition du mot de passe:")
-                lower = int(input("Minuscules: "))
-                upper = int(input("Majuscules: "))
-                digits = int(input("Chiffres: "))
-                special = int(input("Caractères spéciaux: "))
+                nb_min = int(input("Minuscules: "))
+                nb_maj = int(input("Majuscules: "))
+                nb_chif = int(input("Chiffres: "))
+                nb_spe = int(input("Caractères spéciaux: "))
                 
-                if lower < 0 or upper < 0 or digits < 0 or special < 0:
-                    raise ValueError("Nombres négatifs non autorisés")
+                if min(nb_min, nb_maj, nb_chif, nb_spe) < 0:
+                    raise ValueError("Les nombres doivent être positifs")
                 
-                password = generator.generate_password(lower, upper, digits, special)
-                entropy = checker.calculate_entropy(password)
-                strength = checker.check_password_strength(password)
-                
-                print(f"\nMot de passe: {password}")
-                print(f"Entropie: {entropy:.2f} bits")
-                print(f"Force: {strength}")
+                password = generator.generer_password(nb_min, nb_maj, nb_chif, nb_spe)
+                print(f"\n✨ Mot de passe généré: {password}")
+                print(f"💪 Force: {checker.evaluer_force(password)}")
                 
             except ValueError as e:
-                print(f"Erreur: {str(e)}")
-            
-        elif choice == "3":
+                print(f"❌ Erreur: {str(e)}")
+                
+        elif choix == "3":
             try:
-                # Génération de passphrase
-                num_words = int(input("Nombre de mots (défaut: 5): ") or "5")
-                if num_words <= 0:
-                    raise ValueError("Le nombre doit être positif")
-                
-                passphrase = passphrase_gen.generate_passphrase(num_words)
-                print(f"\nPassphrase: {passphrase}")
-                entropy = checker.calculate_entropy(passphrase.replace(" ", ""))
-                strength = checker.check_password_strength(passphrase.replace(" ", ""))
-                print(f"Entropie: {entropy:.2f} bits")
-                print(f"Force: {strength}")
+                nb_mots = int(input("Nombre de mots (5 recommandé): "))
+                if nb_mots <= 0:
+                    raise ValueError("Le nombre de mots doit être positif")
+                passphrase = passphrase_gen.generer_passphrase(nb_mots)
+                print(f"\n✨ Passphrase générée: {passphrase}")
+                # Analyse de la force
+                force = checker.evaluer_force(passphrase.replace(" ", ""))
+                print(f"💪 Force: {force}")
                 
             except ValueError as e:
-                print(f"Erreur: {str(e)}")
-            
-        elif choice == "4":
-            print("Au revoir!")
+                print(f"❌ Erreur: {str(e)}")
+
+        elif choix == "4":
+            passphrase_gen.afficher_instructions()
+                
+        elif choix == "5":
+            print("👋 Au revoir!")
             break
+            
         else:
-            print("Option invalide")
+            print("❌ Option invalide")
 
 if __name__ == "__main__":
     main()

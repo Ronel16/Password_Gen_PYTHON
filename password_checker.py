@@ -1,42 +1,51 @@
 #!/usr/bin/env python
-import math
-import string
+"""
+Ce module implémente un vérificateur de force de mot de passe basé sur les recommandations de l'ANSSI.
+Il permet de calculer l'entropie d'un mot de passe et d'évaluer sa force.
+
+"""
 
 class PasswordChecker:
     def __init__(self):
-        self.lowercase = set(string.ascii_lowercase)
-        self.uppercase = set(string.ascii_uppercase)
-        self.digits = set(string.digits)
-        self.special_chars = set(string.punctuation)
+        # Caractères possibles pour un mot de passe
+        self.minuscules = 'abcdefghijklmnopqrstuvwxyz'
+        self.majuscules = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        self.chiffres = '0123456789'
+        self.speciaux = '!@#$%^&*()_+-=[]{}|;:,.<>?'
+    
+    def verifier_caracteres(self, password):
+        """Compte les différents types de caractères"""
+        nb_minuscules = sum(1 for c in password if c in self.minuscules)
+        nb_majuscules = sum(1 for c in password if c in self.majuscules)
+        nb_chiffres = sum(1 for c in password if c in self.chiffres)
+        nb_speciaux = sum(1 for c in password if c in self.speciaux)
         
-    def calculate_entropy(self, password):
-        """Calcule l'entropie d'un mot de passe selon les critères de l'ANSSI"""
-        char_space = 0
+        return (nb_minuscules, nb_majuscules, nb_chiffres, nb_speciaux)
+    
+    def evaluer_force(self, password):
+        """Évalue la force d'un mot de passe"""
+        # Critères de force
+        score = 0
         
-        if any(c in self.lowercase for c in password):
-            char_space += 26
-        if any(c in self.uppercase for c in password):
-            char_space += 26
-        if any(c in self.digits for c in password):
-            char_space += 10
-        if any(c in self.special_chars for c in password):
-            char_space += len(self.special_chars)
+        # Longueur minimum
+        if len(password) >= 8:
+            score += 1
             
-        if char_space == 0:
-            return 0
-            
-        entropy = len(password) * math.log2(char_space)
-        return entropy
+        # Présence des différents types
+        mins, majs, chifs, specs = self.verifier_caracteres(password)
+        if mins > 0: score += 1  # Minuscules
+        if majs > 0: score += 1  # Majuscules
+        if chifs > 0: score += 1  # Chiffres
+        if specs > 0: score += 1  # Spéciaux
         
-    def check_password_strength(self, password):
-        """Évalue la force d'un mot de passe basé sur son entropie"""
-        entropy = self.calculate_entropy(password)
-        
-        if entropy < 64:
-            return "Faible"
-        elif entropy < 80:
-            return "Moyen"
-        elif entropy < 100:
-            return "Fort"
+        # Retourne une évaluation basée sur le score
+        if score < 2:
+            return "❌ Très faible"
+        elif score < 3:
+            return "⚠️ Faible"
+        elif score < 4:
+            return "✅ Moyen"
+        elif score < 5:
+            return "💪 Fort"
         else:
-            return "Très fort"
+            return "🔒 Très fort"

@@ -1,32 +1,48 @@
-#!/usr/bin/env python
+# Générateur de passphrase basé sur la méthode des dés de l'EFF
 import random
 
 class PassphraseGenerator:
     def __init__(self):
-        self.word_list = self._load_wordlist()
-        
-    def _load_wordlist(self):
-        """
-        Charge la liste de mots pour la méthode des dés
-        À implémenter: charger depuis un fichier wordlist.txt
-        """
+        # Dictionnaire qui stockera les mots
+        self.wordlist = {}
+        # Chargement de la liste depuis le fichier
+        self.load_wordlist()
+
+    def load_wordlist(self):
+        """Charge la liste de mots du fichier"""
         try:
-            with open('wordlist.txt', 'r', encoding='utf-8') as file:
-                return [line.strip() for line in file if line.strip()]
+            # Lecture du fichier EFF
+            with open('eff_large_wordlist.txt', 'r') as f:
+                for line in f:
+                    # Format: numéro mot
+                    num, word = line.strip().split('\t')
+                    self.wordlist[num] = word
         except FileNotFoundError:
-            # Liste de secours si le fichier n'est pas trouvé
-            print("Attention: fichier wordlist.txt non trouvé, utilisation d'une liste de secours")
-            return ["mot1", "mot2", "mot3", "mot4", "mot5"]
+            print("❌ Fichier eff_large_wordlist.txt non trouvé")
+    
+    def lancer_des(self):
+        """Simule un lancer de 5 dés"""
+        return ''.join(str(random.randint(1, 6)) for _ in range(5))
+    
+    def generer_passphrase(self, nb_mots=5):
+        """Génère une passphrase avec le nombre de mots spécifié"""
+        if len(self.wordlist) == 0:
+            return "❌ Erreur: Liste de mots non chargée"
+            
+        mots = []
+        for _ in range(nb_mots):
+            while True:
+                code = self.lancer_des()
+                if code in self.wordlist:
+                    mots.append(self.wordlist[code])
+                    break
+        return ' '.join(mots)
+
+    def afficher_instructions(self):
+        """Instructions pour générer une passphrase avec des dés physiques"""
+        print("\n📌 Instructions pour la méthode des dés:")
+        print("1. Lancez 5 dés")
+        print("2. Notez les chiffres (ex: 1-4-2-6-3)")
+        print("3. Cherchez le mot dans la liste EFF")
+        print("4. Répétez pour obtenir plusieurs mots\n")
         
-    def roll_dice(self, num_dice=5):
-        """Simule un lancer de dés"""
-        return ''.join(str(random.randint(1, 6)) for _ in range(num_dice))
-        
-    def generate_passphrase(self, num_words=5):
-        """Génère une passphrase avec la méthode des dés"""
-        passphrase = []
-        for _ in range(num_words):
-            # Sélection aléatoire d'un mot de la liste
-            word = random.choice(self.word_list)
-            passphrase.append(word)
-        return ' '.join(passphrase)
