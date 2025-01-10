@@ -1,56 +1,64 @@
 # Générateur et Testeur de Mot de Passe
 
-Ce projet est un outil de sécurité permettant de générer et tester des mots de passe selon les critères de l'ANSSI.
+Ce projet est un outil de sécurité permettant de générer et tester des mots de passe, incluant :
+- Génération de mots de passe aléatoires personnalisables
+- Génération de passphrases avec la méthode des dés de l'EFF
+- Test de force des mots de passe
 
 ## Fonctionnalités
 
-- Test de force de mot de passe basé sur l'entropie
-- Génération de mot de passe aléatoire avec critères personnalisables
-- Génération de passphrase selon la méthode des dés
-- Interface en ligne de commande interactive
+- **🔍 Test de mots de passe**
+  - Analyse de la composition (minuscules, majuscules, chiffres, caractères spéciaux)
+  - Évaluation de la force
+
+- **🎲 Génération de mots de passe**
+  - Choix du nombre de caractères de chaque type
+  - Mélange aléatoire
+  - Évaluation automatique de la force
+
+- **🎯 Génération de passphrase**
+  - Utilisation de la liste de mots de l'EFF
+  - Méthode des dés pour une génération aléatoire sécurisée
+  - Instructions pour utiliser des dés physiques
 
 ## Installation
 
-1. Clonez le dépôt :
+1. Cloner le repository :
 ```bash
-git clone https://github.com/Ronel16/Password_Gen_PYTHON
+git clone https://github.com/Ronel16/Password_Gen_PYTHON.git
 cd Password_Gen_PYTHON
 ```
 
-2. (Optionnel) Créez et activez un environnement virtuel :
-```bash
-python -m venv venv
-source venv/bin/activate  # Sur Unix
-venv\Scripts\activate     # Sur Windows
-```
+2. Vérifier que tous les fichiers sont présents :
+- password_checker.py
+- password_generator.py
+- passphrase_generator.py
+- test_unitaire.py
+- main.py
+- eff_large_wordlist.txt
 
 ## Utilisation
 
-Lancez le programme principal :
+Lancer le programme :
 ```bash
 python main.py
 ```
 
 ## Tests
 
-Pour lancer les tests unitaires :
+Lancer les tests unitaires :
 ```bash
-python -m unittest test_password.py
+python -m unittest test_unitaire.py
 ```
 
 ## Structure du Projet
 
-- `main.py` : Point d'entrée du programme
-- `password_checker.py` : Module de vérification de force de mot de passe
-- `password_generator.py` : Générateur de mot de passe aléatoire
-- `passphrase_generator.py` : Générateur de passphrase
-- `test_password.py` : Tests unitaires
-- `wordlist.txt` : Liste de mots pour la génération de passphrase (à fournir)
+- `main.py` : Interface utilisateur principale
+- `password_checker.py` : Module de vérification des mots de passe
+- `password_generator.py` : Génération de mots de passe aléatoires
+- `passphrase_generator.py` : Génération de passphrase avec la méthode EFF
+- `test_unitaire.py` : Tests unitaires
+- `eff_large_wordlist.txt` : Liste de mots pour la génération de passphrase
 
-## Critères de l'ANSSI
-
-Le programme suit les recommandations de l'ANSSI pour le calcul de l'entropie des mots de passe :
-- Moins de 64 bits : Faible
-- Entre 64 et 80 bits : Moyen
-- Entre 80 et 100 bits : Fort
-- Plus de 100 bits : Très fort
+## Auteur
+[Ronel BANKOLE]
