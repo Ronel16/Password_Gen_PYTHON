@@ -13,8 +13,8 @@ Ce projet est un outil de sécurité permettant de générer et tester des mots 
 
 1. Clonez le dépôt :
 ```bash
-git clone [URL_DU_REPO]
-cd [NOM_DU_REPO]
+git clone https://github.com/Ronel16/Password_Gen_PYTHON
+cd Password_Gen_PYTHON
 ```
 
 2. (Optionnel) Créez et activez un environnement virtuel :
