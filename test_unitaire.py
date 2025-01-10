@@ -50,8 +50,13 @@ class TestPassword(unittest.TestCase):
         # Mot de passe très faible
         self.assertEqual(self.checker.evaluer_force("abc"), "❌ Très faible")
         
-        # Mot de passe fort
-        self.assertEqual(self.checker.evaluer_force("Test123!@#"), "💪 Fort")
+        # Mot de passe très fort (contient tous les types de caractères)
+        self.assertEqual(self.checker.evaluer_force("Test123!@#"), "🔒 Très fort")
+        
+        # Test des différents niveaux
+        self.assertEqual(self.checker.evaluer_force("abcdefgh"), "⚠️ Faible")  # Longueur ok mais que minuscules
+        self.assertEqual(self.checker.evaluer_force("Abcdefgh"), "✅ Moyen")   # Longueur ok + minuscules + majuscules
+        self.assertEqual(self.checker.evaluer_force("Abcd123!"), "🔒 Très fort") # Tous les types
 
 if __name__ == '__main__':
     unittest.main()
