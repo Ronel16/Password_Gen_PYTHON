@@ -64,4 +64,4 @@ python -m unittest test_password.py
 - `eff_large_wordlist.txt` : Liste de mots pour la génération de passphrase
 
 ## Auteur
-[Ronel BANKOLE]
+Ronel BANKOLE
