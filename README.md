@@ -34,6 +34,7 @@ cd Password_Gen_PYTHON
 - password_generator.py
 - passphrase_generator.py
 - test_unitaire.py
+- test_password.py
 - main.py
 - eff_large_wordlist.txt
 
@@ -49,6 +50,7 @@ python main.py
 Lancer les tests unitaires :
 ```bash
 python -m unittest test_unitaire.py
+python -m unittest test_password.py
 ```
 
 ## Structure du Projet
@@ -57,7 +59,8 @@ python -m unittest test_unitaire.py
 - `password_checker.py` : Module de vérification des mots de passe
 - `password_generator.py` : Génération de mots de passe aléatoires
 - `passphrase_generator.py` : Génération de passphrase avec la méthode EFF
-- `test_unitaire.py` : Tests unitaires
+- `test_unitaire.py` : Tests unitaires généraux
+- `test_password.py` : Tests spécifiques des mots de passe
 - `eff_large_wordlist.txt` : Liste de mots pour la génération de passphrase
 
 ## Auteur
